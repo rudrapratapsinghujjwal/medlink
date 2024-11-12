@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedLink</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <style>
+        /* Styling similar to what you had */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #53e3a6, #0cbaba);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        input[type="text"] {
+            padding: 1rem;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 30px 0 0 30px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #search-button {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            color: #0cbaba;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #search-button:hover {
+            background-color: #e8f5f2;
+        }
+
+        #search-results {
+            margin-top: 20px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Find Your Medicine</h1>
+            <p>Your health, our priority. Locate your medicine at the nearest pharmacy.</p>
+            <div class="search-container">
+                <input type="text" id="medicine-search" placeholder="Search for a medicine..." />
+                <button type="button" id="search-button">Search</button>
+            </div>
+            <div id="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Firebase Initialization -->
+    <script type="module">
+        // Firebase import statements
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkdhx_Pyp_nM-0ILZTuXDS7x0uE8hK1zg",
+            authDomain: "medlink-csp.firebaseapp.com",
+            databaseURL: "https://medlink-csp-default-rtdb.firebaseio.com",  // Ensure correct URL
+            projectId: "medlink-csp",
+            storageBucket: "medlink-csp.appspot.com",
+            messagingSenderId: "529979645535",
+            appId: "1:529979645535:web:60f47bc144036292cd05ea",
+            measurementId: "G-QQ6LFHVMZ8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Search function
+        async function searchMedicines(query) {
+            const dbRef = ref(db, 'medicines');  // Correct path for medicines
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const medicines = snapshot.val();
+                const results = Object.values(medicines).filter(med =>
+                    med.name.toLowerCase().includes(query.toLowerCase())
+                );
+                displayResults(results);
+            } else {
+                console.log("No data found!");
+            }
+        }
+
+        // Display results
+        function displayResults(medicines) {
+            const resultsContainer = document.getElementById("search-results");
+            resultsContainer.innerHTML = ""; // Clear previous results
+
+            if (medicines.length > 0) {
+                medicines.forEach(medicine => {
+                    const resultItem = document.createElement("div");
+                    resultItem.innerHTML = `
+                        <h3>${medicine.name}</h3>
+                        <p>Brand: ${medicine.brand}</p>
+                        <p>Category: ${medicine.category}</p>
+                        <p>Price: ₹${medicine.price}</p>
+                        <p>Expiry Date: ${medicine.expiry_date}</p>
+                    `;
+                    resultsContainer.appendChild(resultItem);
+                });
+                resultsContainer.style.display = "block";
+            } else {
+                resultsContainer.innerHTML = "<p>No results found.</p>";
+                resultsContainer.style.display = "block";
+            }
+        }
+
+        // Add event listener for search button
+        document.getElementById("search-button").addEventListener("click", () => {
+            const query = document.getElementById("medicine-search").value.trim();
+            if (query) {
+                searchMedicines(query);
+            }
+        });
+    </script>
+</body>
+</html>

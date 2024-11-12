@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Portal - MedLink</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        header {
+            background: #0cbaba;
+            padding: 20px;
+            padding-top: 9.5%;
+            text-align: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .section {
+            padding: 60px 20px;
+            background-color: #ffffff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .section:nth-child(odd) {
+            background-color: #f7fdfc;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #0cbaba;
+            text-align: center;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .feature-item {
+            background-color: #ffffff;
+            width: 30%;
+            min-width: 250px;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #53e3a6;
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #0cbaba;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:hover {
+            background-color: #53e3a6;
+        }
+
+        .patient-list {
+            margin-top: 20px;
+        }
+
+        .patient-item {
+            background-color: #ffffff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .patient-item:hover {
+            background-color: #e8f5f2;
+        }
+
+        .patient-detail {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .prescription-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .prescription-form input,
+        .prescription-form textarea {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .prescription-form textarea {
+            resize: vertical;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+.navbar {
+    background-color: #0cbaba;
+    padding: 15px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #53e3a6;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#">MedLink</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="users.html">Patient</a></li>
+            </ul>
+        </div>
+    </nav>
+    <header>Doctor Portal</header>
+    
+
+    <section id="patient-management" class="section">
+        <div class="container">
+            <h2>Patient Management</h2>
+            <div class="features">
+                <div class="feature-item">
+                    <h3>View and Manage Patient Profiles</h3>
+                    <p>Access and edit patient medical history, current medications, and prescriptions.</p>
+                    <div class="patient-list" id="patient-list">
+                    </div>
+                    <button class="button" onclick="showAddPatientForm()">Add New Patient</button>
+                </div>
+            </div>
+            <div class="patient-detail" id="patient-detail">
+            </div>
+        </div>
+    </section>
+
+    <section id="add-patient" class="section" style="display:none;">
+        <div class="container">
+            <h2 id="form-title">Add New Patient</h2>
+            <form id="patient-form">
+                <div class="form-group">
+                    <label for="patient-name">Patient Name:</label>
+                    <input type="text" id="patient-name" required />
+                </div>
+                <div class="form-group">
+                    <label for="patient-history">Medical History:</label>
+                    <textarea id="patient-history" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="current-medications">Current Medications:</label>
+                    <textarea id="current-medications" rows="3" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="button">Save Patient</button>
+                    <button type="button" class="button" onclick="hideAddPatientForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section id="prescription-creation" class="section">
+        <div class="container">
+            <h2>Prescription Creation</h2>
+            <div class="features">
+                <div class="feature-item">
+                    <h3>Issue Electronic Prescriptions</h3>
+                    <p>Create and add prescriptions directly to the patient's medical history.</p>
+                    <div class="prescription-form">
+                        <select id="patient-selector">
+                        </select>
+                        <input type="text" id="prescription-name" placeholder="Medicine Name" />
+                        <textarea id="prescription-dosage" placeholder="Dosage and Instructions"></textarea>
+                        <button class="button" onclick="createPrescription()">Create Prescription</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const patients = [
+            {
+                name: 'Harris',
+                medicalHistory: 'History of hypertension.',
+                currentMedications: 'Metformin, Lisinopril',
+                prescriptions: []
+            },
+            {
+                name: 'Rudrapratap',
+                medicalHistory: 'History of asthma.',
+                currentMedications: 'Albuterol, Cetirizine',
+                prescriptions: []
+            }
+        ];
+
+        let editIndex = -1;
+
+        function loadPatients() {
+            const patientList = document.getElementById('patient-list');
+            const patientSelector = document.getElementById('patient-selector');
+            patientList.innerHTML = '';
+            patientSelector.innerHTML = '<option value="">Select Patient</option>';
+            patients.forEach((patient, index) => {
+                const patientItem = document.createElement('div');
+                patientItem.className = 'patient-item';
+                patientItem.textContent = patient.name;
+                patientItem.onclick = () => viewPatientProfile(index);
+                patientList.appendChild(patientItem);
+
+                const patientOption = document.createElement('option');
+                patientOption.value = index;
+                patientOption.textContent = patient.name;
+                patientSelector.appendChild(patientOption);
+            });
+        }
+
+        function viewPatientProfile(index) {
+            const patient = patients[index];
+            const patientDetail = document.getElementById('patient-detail');
+            const prescriptions = patient.prescriptions.length > 0 ? patient.prescriptions.join('<br>') : 'No prescriptions yet.';
+            patientDetail.innerHTML = `
+                <h3>${patient.name}</h3>
+                <p><strong>Medical History:</strong> ${patient.medicalHistory}</p>
+                <p><strong>Current Medications:</strong> ${patient.currentMedications}</p>
+                <p><strong>Prescriptions:</strong><br>${prescriptions}</p>
+                <button class="button" onclick="editPatient(${index})">Edit Patient</button>
+            `;
+            patientDetail.style.display = 'block';
+        }
+
+        function showAddPatientForm() {
+            document.getElementById('add-patient').style.display = 'block';
+            document.getElementById('form-title').textContent = 'Add New Patient';
+            document.getElementById('patient-form').reset();
+            editIndex = -1;
+        }
+
+        function hideAddPatientForm() {
+            document.getElementById('add-patient').style.display = 'none';
+        }
+
+        function editPatient(index) {
+            editIndex = index;
+            const patient = patients[index];
+            document.getElementById('form-title').textContent = 'Edit Patient';
+            document.getElementById('patient-name').value = patient.name;
+            document.getElementById('patient-history').value = patient.medicalHistory;
+            document.getElementById('current-medications').value = patient.currentMedications;
+            document.getElementById('add-patient').style.display = 'block';
+        }
+
+        document.getElementById('patient-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('patient-name').value;
+            const medicalHistory = document.getElementById('patient-history').value;
+            const currentMedications = document.getElementById('current-medications').value;
+
+            if (name && medicalHistory && currentMedications) {
+                if (editIndex >= 0) {
+                    patients[editIndex].name = name;
+                    patients[editIndex].medicalHistory = medicalHistory;
+                    patients[editIndex].currentMedications = currentMedications;
+                } else {
+                    patients.push({
+                        name,
+                        medicalHistory,
+                        currentMedications,
+                        prescriptions: []
+                    });
+                }
+                loadPatients();
+                hideAddPatientForm();
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        function createPrescription() {
+            const patientIndex = document.getElementById('patient-selector').value;
+            const name = document.getElementById('prescription-name').value;
+            const dosage = document.getElementById('prescription-dosage').value;
+
+            if (patientIndex !== '' && name && dosage) {
+                const patient = patients[patientIndex];
+                patient.prescriptions.push(`${name} - ${dosage}`);
+                alert('Prescription added for ' + patient.name);
+                loadPatients();
+            } else {
+                alert('Please select a patient and fill in all fields.');
+            }
+        }
+
+        loadPatients();
+    </script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedLink</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #53e3a6, #0cbaba);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        input[type="text"] {
+            padding: 1rem;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 30px 0 0 30px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #search-button {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            color: #0cbaba;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #search-button:hover {
+            background-color: #e8f5f2;
+        }
+
+        #search-results {
+            margin-top: 20px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .section {
+            padding: 60px 20px;
+            background-color: #ffffff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .section:nth-child(odd) {
+            background-color: #f7fdfc;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #0cbaba;
+            text-align: center;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .feature-item {
+            background-color: #ffffff;
+            width: 30%;
+            min-width: 250px;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #53e3a6;
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .navbar {
+            background-color: #0cbaba;
+            padding: 15px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #53e3a6;
+        }
+    </style>
+</head>
+<body>
+      <!-- Firebase Initialization -->
+      <script type="module">
+        // Firebase import statements
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkdhx_Pyp_nM-0ILZTuXDS7x0uE8hK1zg",
+            authDomain: "medlink-csp.firebaseapp.com",
+            projectId: "medlink-csp",
+            storageBucket: "medlink-csp.appspot.com",
+            messagingSenderId: "529979645535",
+            appId: "1:529979645535:web:60f47bc144036292cd05ea",
+            measurementId: "G-QQ6LFHVMZ8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchMedicines() {
+            const medicinesCollection = collection(db, "brand"); // Assuming 'medicines' is your collection name
+            const medicinesSnapshot = await getDocs(medicinesCollection);
+            return medicinesSnapshot.docs.map(doc => doc.data().name); // Assuming each document has a 'name' field
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchButton = document.getElementById("search-button");
+            const results = document.getElementById("search-results");
+
+            searchButton.addEventListener("click", async () => {
+                const query = document.getElementById("medicine-search").value.trim();
+                results.innerHTML = ""; // Clear previous results
+                if (!query) {
+                    results.style.display = "none";
+                    return;
+                }
+
+                const medicines = await fetchMedicines();
+
+                // Edit distance function
+                function editDistance(str1, str2) {
+                    const dp = Array.from({ length: str1.length + 1 }, () => []);
+                    for (let i = 0; i <= str1.length; i++) dp[i][0] = i;
+                    for (let j = 0; j <= str2.length; j++) dp[0][j] = j;
+                    for (let i = 1; i <= str1.length; i++) {
+                        for (let j = 1; j <= str2.length; j++) {
+                            dp[i][j] = Math.min(
+                                dp[i - 1][j] + 1,
+                                dp[i][j - 1] + 1,
+                                dp[i - 1][j - 1] + (str1[i - 1] === str2[j - 1] ? 0 : 1)
+                            );
+                        }
+                    }
+                    return dp[str1.length][str2.length];
+                }
+
+                // Filter medicines by similarity
+                const filtered = medicines.filter(med => editDistance(med.toLowerCase(), query.toLowerCase()) <= 3);
+                if (filtered.length === 0) {
+                    results.innerHTML = "<p>No results found.</p>";
+                } else {
+                    results.innerHTML = "<ul>" + filtered.map(med => `<li>${med}</li>`).join("") + "</ul>";
+                }
+                results.style.display = "block";
+            });
+        });
+    </script>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#">MedLink</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="doctor.html">Doctor</a></li>
+                <li><a href="users.html">Patient</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Find Your Medicine</h1>
+            <p>Your health, our priority. Locate your medicine at the nearest pharmacy.</p>
+            <div class="search-container">
+                <input type="text" id="medicine-search" placeholder="Search for a medicine..." />
+                <button type="button" id="search-button">Search</button>
+            </div>
+            <div id="search-results"></div>
+        </div>
+    </div>
+
+    <section id="prescription-management" class="section">
+        <div class="container">
+            <h2>Prescription Management</h2>
+            <div class="features">
+                <div class="feature-item">
+                    <h3>Receive Prescriptions</h3>
+                    <p>Get your prescriptions directly from your doctor via the app.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>View Prescription History</h3>
+                    <p>Easily access and reorder from your prescription history.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="drug-search" class="section">
+        <div class="container">
+            <h2>Drug Search</h2>
+            <div class="features">
+                <div class="feature-item">
+                    <h3>Search by Name</h3>
+                    <p>Find medicine based on your prescriptions or by brand.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Find Alternatives</h3>
+                    <p>Discover alternative options for your medicine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById("search-button").addEventListener("click", function() {
+            const query = document.getElementById("medicine-search").value.trim();
+            const results = document.getElementById("search-results");
+            results.innerHTML = ""; // Clear previous results
+            if (!query) {
+                results.style.display = "none";
+                return;
+            }
+            const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchMedicines() {
+            const medicinesCollection = collection(db, "medicines"); // Assuming 'medicines' is your collection name
+            const medicinesSnapshot = await getDocs(medicinesCollection);
+            const medicines = medicinesSnapshot.docs.map(doc => doc.data().name); // Assuming each document has a 'name' field
+            return medicines;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchButton = document.getElementById("search-button");
+            const results = document.getElementById("search-results");
+
+            searchButton.addEventListener("click", async () => {
+                const query = document.getElementById("medicine-search").value.trim();
+                results.innerHTML = ""; // Clear previous results
+                if (!query) {
+                    results.style.display = "none";
+                    return;
+                }
+
+                const medicines = await fetchMedicines();
+
+                // Edit distance function
+                function editDistance(str1, str2) {
+                    const dp = Array.from({ length: str1.length + 1 }, () => []);
+                    for (let i = 0; i <= str1.length; i++) dp[i][0] = i;
+                    for (let j = 0; j <= str2.length; j++) dp[0][j] = j;
+                    for (let i = 1; i <= str1.length; i++) {
+                        for (let j = 1; j <= str2.length; j++) {
+                            dp[i][j] = Math.min(
+                                dp[i - 1][j] + 1,
+                                dp[i][j - 1] + 1,
+                                dp[i - 1][j - 1] + (str1[i - 1] === str2[j - 1] ? 0 : 1)
+                            );
+                        }
+                    }
+                    return dp[str1.length][str2.length];
+                }
+
+                // Filter medicines by similarity
+                const filtered = medicines.filter(med => editDistance(med.toLowerCase(), query.toLowerCase()) <= 3);
+                if (filtered.length === 0) {
+                    results.innerHTML = "<p>No results found.</p>";
+                } else {
+                    results.innerHTML = "<ul>" + filtered.map(med => `<li>${med}</li>`).join("") + "</ul>";
+                }
+                results.style.display = "block";
+            });
+        });
+        });
+    </script>
+</body>
+</html>
